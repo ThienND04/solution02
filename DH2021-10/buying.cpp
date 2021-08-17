@@ -1,70 +1,66 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 
 using namespace std;
 
 typedef long long ll;
 #define task "buying"
-#define maxn 201
+#define maxn 2001
 #define bit(x, i) ((x >> i) & 1)
 #define inf 1000000000000000
 
-int n;
-int x[maxn], y[maxn], z[maxn];
-ll l[maxn][maxn][maxn];
-
-void init()
+struct data
 {
-    cin >> n;
-    for (int i = 1; i <= n; i++)
-        cin >> x[i] >> y[i] >> z[i];
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 0; j <= i; j++)
-        {
-            for (int k = 0; k <= i; k++)
-            {
-                l[i][j][k] = inf;
-            }
+    int id, sc1, sc2, sc3;
+    // 2^sc1 > 2^sc2 + 2^sc3
+    data(){
+        id = 0;
+        sc1 = sc2 = sc3 = -1;
+    }
+    bool operator < (const data& a){
+        if(sc1 != a.sc1) return sc1 < a.sc1;
+        if(sc2 != a.sc2) return sc2 < a.sc2;
+        return sc3 < a.sc3;
+    }
+    bool operator < (const data& a){
+        if(sc1 != a.sc1) return sc1 < a.sc1;
+        if(sc2 != a.sc2) return sc2 < a.sc2;
+        return sc3 <= a.sc3;
+    }
+    void reArange(){
+        if(sc1 < sc2) swap(sc1, sc2);
+        if(sc1 < sc3) swap(sc1, sc3);
+        if(sc2 < sc3) swap(sc2, sc3);
+        if(sc2 == sc3 && sc3 != -1) {
+            sc2 ++;
+            sc3 = -1;
+        }
+        if(sc1 < sc2) swap(sc1, sc2);
+        if(sc1 == sc2 && sc2 != -1) {
+            sc1 ++;
+            sc2 = -1;
         }
     }
+};
+
+int n;
+data a[maxn];
+
+void init(){
+    cin >> n;
+    for(int i = 1; i <= n; i ++){
+        a[i].id = i;
+        cin >> a[i].sc1;
+    }
+    for(int i = 1; i <= n; i ++)  cin >> a[i].sc2;
+    sort(a + 1, a + n + 1);
 }
 
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    // freopen(task ".inp", "r", stdin);
-    // freopen(task ".out", "w", stdout);
-    init();
-    for (int i = 1; i <= n; i++)
-    {
-        for (int t = 1; t <= 3; t++)
-        {
-            for (int j = 0; j < i; j++)
-            {
-                for (int k = 0; k < i; k++)
-                {
-                    if (t == 1)
-                    {
-                        l[i][j][k] = min(l[i][j][k], l[i - 1][j][k] + x[i]);
-                    }
-                    else if (t == 2)
-                    {
-                        l[i][j + 1][k] = min(l[i][j + 1][k], l[i - 1][j][k] + y[i] - j);;
-                    }
-                    else
-                    {
-                        l[i][j][k + 1] = min(l[i][j][k + 1], l[i - 1][j][k] + z[i] - k);
-                    }
-                }
-            }
-        }
-    }
-    ll res = inf;
-    for(int i = 0; i <= n; i ++){
-        for(int j = 0; j <= n; j++) res = min(res, l[n][i][j]);
-    }
-    cout << res;
+void solve(){
+
+}
+
+int main(){
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    freopen(task ".inp", "r", stdin); freopen(task ".out", "w", stdout);
     return 0;
 }
