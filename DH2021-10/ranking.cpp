@@ -4,7 +4,7 @@ using namespace std;
 
 typedef long long ll;
 #define task "ranking"
-#define maxn 20
+#define maxn 201
 #define bit(x, i) ((x >> i) & 1)
 #define inf 1000000000000000
 
@@ -39,6 +39,7 @@ struct data
             sc1 ++;
             sc2 = -1;
         }
+        if(sc2 < sc3) swap(sc2, sc3);
     }
 };
 
@@ -62,6 +63,7 @@ void init(){
 void calcBest(int p){
     data bestSc = a[p];
     bestSc.sc3 = 1;
+    bestSc.reArange();
     int l = 0, r = n + 1;
     while(r - l > 1){
         int mid = (l + r) / 2;
@@ -72,21 +74,51 @@ void calcBest(int p){
             data tmp = a[i];
             tmp.sc3 = curSc3 --;
             tmp.reArange();
-            if(tmp <= bestSc){
+            if(tmp < bestSc){
                 check = 0;
                 break;
             }
         }
         if(check){
             r = mid;
-            best[a[p].id] = n - curSc3;
+            best[a[p].id] = curSc3;
         }
         else l = mid;
     }
 }
 
+void calcWost(int p){
+    data wostSc = a[p];
+    wostSc.sc3 = n;
+    wostSc.reArange();
+    int l = 0, r = n + 1;
+    while(r - l > 1){
+        int mid = (l + r) / 2;
+        bool check = 1;
+        int curSc3 = 1;
+        for(int i = mid; i >= 1; i --){
+            if(i == p) continue;
+            data tmp = a[i];
+            tmp.sc3 = curSc3 ++;
+            tmp.reArange();
+            if(wostSc <= tmp){
+                    check = 0;
+                break;
+            }
+        }
+        if(check){
+            l = mid;
+            wost[a[p].id] = curSc3;
+        }
+        else r = mid;
+    }
+}
+
 void solve(){
-    for(int i = 1; i <= n; i ++) calcBest(i);
+    for(int i = 1; i <= n; i ++) {
+        calcBest(i);
+        calcWost(i);
+    }
 }
 
 int main(){
@@ -94,6 +126,6 @@ int main(){
     freopen(task ".inp", "r", stdin); freopen(task ".out", "w", stdout);
     init();
     solve();
-    for(int i = 1; i <= n; i ++) cout << best[i] << "\n";
+    for(int i = 1; i <= n; i ++) cout << best[i] << " " << wost[i] << "\n";
     return 0;
 }

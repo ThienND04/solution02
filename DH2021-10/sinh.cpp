@@ -3,7 +3,7 @@
 using namespace std;
 
 typedef long long ll;
-#define task "buying"
+#define task "ranking"
 #define maxn 1000005
 #define inf 1e18
 #define reset(a) memset(a, 0, sizeof(a))
@@ -17,6 +17,13 @@ int rand(int gh){
     return rand() % gh + 1;
 }
 
+int rand(vector<int>& v){
+    int p = rand() % v.size();
+    int res = v[p];
+    v.erase(v.begin() + p);
+    return res;
+}
+
 void print(ofstream& f, int arr[], int sz){
     for(int i = 1; i <= sz; i ++) f << arr[i] << " ";
 }
@@ -24,11 +31,17 @@ void print(ofstream& f, int arr[], int sz){
 void sinhTest(){
     cin >> n;
     fi << n << endl;
+    vector<int> v;
+    for(int i= 1; i<= n; i ++) v.push_back(i);
     for(int i = 1; i <= n; i ++) {
-        x[i] = rand(40000);
-        y[i] = rand(40000);
-        z[i] = rand(40000);
-        fi << x[i] << " " << y[i] << " " << z[i] << "\n";
+        x[i] = rand(v);
+        fi << x[i] << " ";
+    }
+    fi << "\n";
+    for(int i= 1; i<= n; i ++) v.push_back(i);
+    for(int i = 1; i <= n; i ++) {
+        x[i] = rand(v);
+        fi << x[i] << " ";
     }
 }
 
