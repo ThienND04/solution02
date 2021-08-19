@@ -9,71 +9,63 @@ typedef long long ll;
 #define inf 1000000007
 #define mod 1000000007
 
-int n, k;
-int c[maxn], par[maxn];
-pii ed[maxn];
-int res = 0;
+int n, k, nset;
+int c[maxn], f[maxn], q[maxn];
+vector<int> adj[maxn];
 
-bool visited[maxn], co[maxn];
-
-int root(int u){
-    if(par[u] == u) return u;
-    return (par[u] = root(par[u]));
-}
-
-void join(int u, int v){
-    par[u] = v;
-}
-
-bool check(){
-    int cnt = 0;
-    memset(co, 0, sizeof(co));
-    for(int i = 1; i <= n; i ++) par[i] = i;
-    for(int i = 1; i <= n; i ++){
-        if(visited[i]){
-            cnt ++;
-            co[c[i]] = 1;
+void build(int u, int par = -1){
+    for(int &v: adj[u]) {
+        if(v == par) {
+            v = adj[u].back();
+            adj[u].pop_back();
+            break;
         }
     }
-    for(int i = 1; i <= k; i ++){
-        if(! co[i]) return 0;
+    for(int v: adj[u]) build(v, u);
+}
+
+void init(){
+    cin >> n >> k;
+    nset = 1 << k + 1;
+    for(int i = 1; i <= n; i ++){
+        cin >> c[i];
+        if(c[i] <= k) c[i] = 1 << c[i];
+        else c[i] = 1;
     }
     for(int i = 1; i < n; i ++){
-        int u = ed[i].first, v = ed[i].second;
-        if(visited[u] && visited[v]){
-            if(root(u) != root(v)){
-                join(u, v);
-                cnt --;
-            }
-        }
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    return (cnt == 1);
+    build(1);
 }
 
-void duyet(int p){
-    if(p > n){
-        res += check();
-        return;
+void visit(int u, int s){
+    for(int v: adj[u]) visit(v, s);
+    if((c[u] & s) != c[u]) {
+        f[u] = 0;
     }
-    visited[p] = 1;
-    for(int i = p + 1; i <= n + 1; i ++){
-        duyet(i);
+    else{
+        f[u] = 1;
+        for(int v: adj[u]){
+            f[u] = (f[u] + 1ll * f[u] * f[v]) % mod;
+        }
     }
-    visited[p] = 0;
+}
+
+void solve(){
+    for(int s = 0; s < nset; s ++){
+        visit(1, s);
+        q[s] = 0;
+        for(int u = 1; u <= n; u ++) q[s] = (q[s] + f[u]) % mod;
+    }
+    int k = __builtin_popcount(20);
 }
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     freopen(task ".inp", "r", stdin); freopen(task ".out", "w", stdout);
-    cin >> n >> k;
-    for(int i = 1; i <= n; i ++) cin >> c[i];
-    for(int i = 1; i < n; i ++){
-        int u, v;
-        cin >> u >> v;
-        ed[i] = {u, v};
-    }
-    duyet(0);
-    if(res) cout << res % mod;
-    else cout << 1;
+    init();
     return 0;
 }

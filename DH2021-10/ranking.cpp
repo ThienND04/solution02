@@ -4,7 +4,7 @@ using namespace std;
 
 typedef long long ll;
 #define task "ranking"
-#define maxn 201
+#define maxn 2001
 #define bit(x, i) ((x >> i) & 1)
 #define inf 1000000000000000
 
@@ -123,7 +123,7 @@ void solve(){
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    freopen(task ".inp", "r", stdin); freopen(task ".out", "w", stdout);
+    // freopen(task ".inp", "r", stdin); freopen(task ".out", "w", stdout);
     init();
     solve();
     for(int i = 1; i <= n; i ++) cout << best[i] << " " << wost[i] << "\n";
