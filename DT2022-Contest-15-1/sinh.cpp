@@ -3,18 +3,18 @@
 using namespace std;
 
 typedef long long ll;
-#define task "diary"
+#define task "boots"
 #define maxn 1000005
 #define inf 1e18
 #define reset(a) memset(a, 0, sizeof(a))
 
 ofstream fi(task ".inp");
 
-int n;
+int n, m;
 int x[maxn], y[maxn], z[maxn];
 
 int rand(int gh){
-    return rand() % gh + rand() % 2;
+    return rand() % gh;
 }
 
 void print(ofstream& f, int arr[], int sz){
@@ -22,12 +22,12 @@ void print(ofstream& f, int arr[], int sz){
 }
 
 void sinhTest(){
-    cin >> n;
-    fi << n << endl;
-    for(int i = 1; i <= n; i ++) {
-        x[i] = rand(n);
-        fi << x[i] << " ";
-    }
+    cin >> n >> m;
+    fi << n << " " << m << endl;
+    fi << 0 << " ";
+    for(int i = 1; i <= n - 2; i ++) fi << rand(20) << " ";
+    fi << 0 << endl;
+    for(int i = 1; i <= m; i ++) fi << rand(20) << " " << rand(20) << endl;
 }
 
 int main(){

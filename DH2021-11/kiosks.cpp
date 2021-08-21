@@ -54,13 +54,25 @@ void visit(int u, int s){
     }
 }
 
+int calc(int s){
+    int res = 0;
+    for(int x = 0; x < nset; x ++){
+        if((x & s) != x) continue;
+        int t = __builtin_popcount(x ^ s);
+        if(t % 2 == 0){
+            
+        }
+    }
+}
+
 void solve(){
     for(int s = 0; s < nset; s ++){
         visit(1, s);
         q[s] = 0;
         for(int u = 1; u <= n; u ++) q[s] = (q[s] + f[u]) % mod;
     }
-    int k = __builtin_popcount(20);
+    int res = calc(nset - 1) + calc(nset - 2);
+
 }
 
 int main(){
