@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "fstream": "cpp",
+        "regex": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "forward_list": "cpp",
+        "ostream": "cpp"
+    }
+}
