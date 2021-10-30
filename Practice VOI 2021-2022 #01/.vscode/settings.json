@@ -24,6 +24,7 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "new": "cpp"
     }
 }

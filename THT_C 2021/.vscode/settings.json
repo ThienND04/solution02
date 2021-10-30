@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "ostream": "cpp",
+        "any": "cpp",
+        "algorithm": "cpp",
+        "random": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "regex": "cpp",
+        "utility": "cpp",
+        "bitset": "cpp",
+        "valarray": "cpp"
+    }
+}

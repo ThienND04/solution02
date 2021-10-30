@@ -4,6 +4,7 @@
         "bitset": "cpp",
         "future": "cpp",
         "optional": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "iostream": "cpp"
     }
 }

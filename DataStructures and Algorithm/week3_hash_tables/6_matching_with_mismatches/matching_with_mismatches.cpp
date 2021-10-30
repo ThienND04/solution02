@@ -13,6 +13,7 @@ int main() {
 	int k;
 	string t, p;
 	while (cin >> k >> t >> p) {
+		if(k == -1) break;
 		auto a = solve(k, t, p);
 		cout << a.size();
 		for (int x : a)

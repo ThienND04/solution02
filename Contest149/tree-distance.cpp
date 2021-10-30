@@ -21,6 +21,8 @@ int node[maxn], sta[maxn], fin[maxn], cnt = 0;
 ll res = 0;
 int par[maxn];
 
+#define TREE_SIZE(u) (fin[u] - sta[u] + 1)
+
 void Add(int& x, int y){
     x += y;
     if(x > mod) x -= mod;
@@ -42,8 +44,33 @@ void DFS(int u){
 void processDFS(int u){    
     int bigChild = -1;
     for(int v: adj[u]){
-        if(bigChild == -1 || )
+        if(v == par[u]) continue;
+        if(bigChild == -1 || TREE_SIZE(v) > TREE_SIZE(bigChild)) bigChild = v;
     }
+    if(bigChild < 0) {
+        cntHight[hight[u]] ++;
+        return;
+    }
+    for(int v: adj[u]){
+        if(v == par[u] || v == bigChild) continue;
+        processDFS(v);
+        for(int j = sta[v]; j <= fin[v]; j ++){
+            cntHight[hight[node[j]]] --;
+        }
+    }
+    processDFS(bigChild);
+    for(int v: adj[u]){
+        if(v == par[u] || v == bigChild) continue;
+        for(int j = sta[v]; j <= fin[v]; j ++){
+            int need = k + 2 * hight[u] - hight[node[j]];
+            if(0 <= need && need < n) res += cntHight[need];
+        }
+        for(int j = sta[v]; j <= fin[v]; j ++){
+            cntHight[hight[node[j]]] ++;
+        }
+    }
+    if(hight[u] + k < n) res += cntHight[hight[u] + k];
+    cntHight[hight[u]] ++;
 }
 
 int main(){
@@ -57,9 +84,8 @@ int main(){
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    // cerr << n << " " << k;
-    // par[1] = 0;
     DFS(1);
+    processDFS(1);
     cout << res;
     return 0;
 }

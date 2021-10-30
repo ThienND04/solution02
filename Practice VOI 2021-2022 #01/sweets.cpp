@@ -9,49 +9,43 @@ typedef long long ll;
 #define task "sweets"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 30
+#define maxn 111
 
 #define bit(x, i) ((x >> i) & 1)
 
 int n, k;
-int a[maxn], p[maxn], q[maxn], cnt = 0, t = 1;
-ll sum = 0, tb = 0;
-
-void duyet(int pos){
-    if(pos > n){
-        ll total = 0;
-        for(int i = 1; i <= cnt; i ++){
-            total += a[q[i]];
+int a[maxn], avg = 0, s[maxn], res[maxn];
+bitset<3338> f[112][3338];
+void trace(){
+    int x = avg, y = avg;
+    for(int i = n; i >= 1; i --){
+        if(x - a[i] >= 0 && f[i - 1][x - a[i]][y]) {
+            x -= a[i];
+            res[i] = 1;
         }
-        if(total == tb){
-            for(int i = 1; i <= cnt; i ++) p[q[i]] = t;
-            t ++;
+        else if(y - a[i] >= 0 && f[i - 1][x][y - a[i]]){
+            y -= a[i];
+            res[i] = 2;
         }
-        p[n + 1] = 0;
-        return;
+        else res[i] = 3;
     }
-    for(int i = pos + 1; i <= n + 1; i ++){
-        if(! p[i]) {
-            q[++ cnt] = i;
-            duyet(i);
-            cnt --;
-            if(p[pos]) {
-                return;
-            }
-        }
-    }
+    for(int i = 1; i <= n; i ++) cout << res[i] << " ";
 }
 
 void solve(){
-    tb = sum / k;
-    duyet(0);
+    f[0][0][0] = 1;
     for(int i = 1; i <= n; i ++){
-        if(! p[i]) {
-            cout << -1;
-            exit(0);
+        for(int x = 0; x <= avg; x ++){
+            if(x + a[i] <= avg) f[i][x + a[i]] |= f[i - 1][x];
+            f[i][x] |= (f[i - 1][x] << a[i]);
+            f[i][x] |= f[i - 1][x];
         }
     }
-    for(int i = 1; i <= n; i ++) cout << p[i] << " ";
+    if(! f[n][avg][avg]) {
+        cout << -1;
+        return;
+    }
+    trace();
 }
 
 int main(){
@@ -61,10 +55,16 @@ int main(){
         freopen(task ".out", "w", stdout);
     }
     cin >> n >> k;
+    for(int i = 1; i <= n; i ++) cin >> a[i];
     for(int i = 1; i <= n; i ++){
-        cin >> a[i];
-        sum += a[i];
+        avg += a[i];
+        s[i] = s[i - 1] + a[i];
+    } 
+    if(avg % k != 0){
+        cout << -1;
+        return 0;
     }
+    avg /= k;
     solve();
     return 0;
 }

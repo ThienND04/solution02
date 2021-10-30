@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "algorithm": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "variant": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "chrono": "cpp",
+        "functional": "cpp",
+        "streambuf": "cpp",
+        "thread": "cpp",
+        "iostream": "cpp"
+    }
+}

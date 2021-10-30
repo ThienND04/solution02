@@ -9,86 +9,97 @@ typedef long long ll;
 #define task "bonus"
 #define inf 1e18
 #define mod 1000000007
-#define maxn 301
-
-// m = 1 
-// n = 200
+#define maxn 5001
 
 int m, n;
-int a[maxn];
-ll dp[maxn][maxn][2];
-bool ok;
+vector<vector<int> > a;
+vector<vector<ll> > f, g;
+pii dist[maxn];
+int dx[] = {-1, -1, 1, 1}, dy[] = {-1, 1, -1, 1};
 
 ll res = 0;
 
 void minimize(ll& x, ll y){
     if(x > y) {
         x = y;
-        ok = 1;
     }
 }
 
 void maximize(ll& x, ll y){
     if(x < y){
         x = y;
-        ok = 1;
     }
 }
 
 void init(){
     cin >> m >> n;
-    for(int i = 1; i<= n; i ++) cin >> a[i];
-}
-
-void solve(){
-    for(int i = 1; i <= n; i ++){
-        for(int j = 1; j <= n; j ++){
-            if(i == j) continue;
-            ll tmp = a[i] + a[j];
-            if(tmp < 0) {
-                dp[i][j][0] = tmp;
-                dp[i][j][1] = -inf;
-            }
-            else{
-                dp[i][j][1] = tmp;
-                dp[i][j][0] = inf;
-            }
+    a.resize(m + 1);
+    f.resize(m + 1);
+    g.resize(m + 1);
+    for(int i = 1; i <= m; i ++ ) {
+        a[i].assign(n + 1, 0);
+        f[i].assign(n + 1, 0);
+        g[i].assign(n + 1, 0);
+    }
+    for(int i = 1; i <= m; i ++){
+        for(int j = 1; j <= n; j ++) {
+            cin >> a[i][j];
         }
     }
-    ok = 1;
+    if(res < 0){
+        cout << res;
+        exit(0);
+    }
+}
+
+void calc(){
     int cnt = 0;
-    while(ok){
-        ok = 0;
-        cnt ++;
-        for(int k = 1; k <= n; k ++){
-            for(int i = 1; i <= n; i ++){
-                if(i == k) continue;
-                for(int j = 1; j <= n; j ++){
-                    if(j == k) continue;
-                    if(abs(j - k) < abs(i - k)){
-                        ll tmp;
-                        if(dp[k][j][0] != inf) {
-                            tmp = dp[k][j][0] + a[i];
-                            if(tmp < 0) minimize(dp[i][k][0], tmp);
-                            else maximize(dp[i][k][1], tmp);
-                            if(dp[k][j][1] == -inf) continue;
-                            tmp = dp[k][j][1] + a[i];
-                            if(tmp >= 0) maximize(dp[i][k][1], tmp);
-                        }
-                        else if(dp[k][j][1] != -inf){
-                            tmp = dp[k][j][1] + a[i];
-                            if(tmp >= 0) maximize(dp[i][k][1], tmp);
-                            else minimize(dp[i][k][0], tmp);
-                        }
-                        if(dp[i][k][0] < inf - 1e15) res = max(res, abs(dp[i][k][0]));
-                        if(dp[i][k][1] > - inf + 1e15) res = max(res, abs(dp[i][k][1]));
+
+    for(int i = 0; i < m; i ++){
+        for(int j = 0; j < n; j ++){
+            dist[++ cnt] = {i, j};
+        }
+    }
+    
+    sort(dist + 1, dist + cnt + 1, [](pii& pa, pii& pb)
+            {return pa.first * pa.first + pa.second * pa.second \
+             <= pb.first * pb.first + pb.second * pb.second; });
+
+    for(int i = 1; i <= m; i ++){
+        for(int j = 1; j <= n; j ++) f[i][j] = g[i][j] = a[i][j];
+    }
+
+    
+    for(int _ = 2; _ <= cnt; _ ++){
+        int x = dist[_].first, y = dist[_].second;
+        for(int i = 1; i <= m; i ++){
+            for(int j = 1; j <= n; j ++){
+                for(int k = 0; k < 4; k ++){
+                    if(i + dx[k] * x > 0 && i + dx[k] * x <= m && j + dy[k] * y > 0 && j + dy[k] * y <= n){
+                        maximize(g[i][j], f[i + dx[k] * x][j + dy[k] * y] + a[i][j]);
+                        if(f[i + dx[k] * x][j + dy[k] * y] != a[i + dx[k] * x][j + dy[k] * y]) 
+                            maximize(res, f[i + dx[k] * x][j + dy[k] * y] + a[i][j]);
+
                     }
                 }
             }
+        }     
+        if(x * x + y * y != dist[_ + 1].first * dist[_ + 1].first + dist[_ + 1].second * dist[_ + 1].second){
+            for(int i = 1; i <= m; i ++){
+                for(int j = 1; j <= n; j ++){
+                    f[i][j] = g[i][j];
+                }
+            }
         }
-        if(! ok) break;
     }
-    // cerr << cnt;
+}
+
+void process(){
+    calc();
+    for(int i = 1; i <= m; i ++){
+        for(int j = 1; j <= n; j ++) a[i][j] = -a[i][j];
+    }
+    calc();
     cout << res;
 }
 
@@ -100,6 +111,6 @@ int main(){
     }
     init();
     // cerr << n;
-    solve();
+    process();
     return 0;
 }
