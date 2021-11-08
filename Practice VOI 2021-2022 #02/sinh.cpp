@@ -3,7 +3,7 @@
 using namespace std;
 
 typedef long long ll;
-#define task "dance"
+#define task "pswap"
 #define maxn 1000005
 #define inf 1e18
 #define reset(a) memset(a, 0, sizeof(a))
@@ -23,11 +23,16 @@ void print(ofstream& f, int arr[], int sz){
 }
 
 void sinhTest(){
-    cin >> n >> m;
-    fi << n << " " << m << "\n";
-    for(int i = 1; i <= m; i ++) {
-        fi << rand(n) << " " << rand(n) << "\n";
+    cin >> n;
+    fi << n << endl;
+    for(int i = 1; i <= n; i ++) {
+        x[i] = i;
     }
+    // random_shuffle(x + 1, x + n + 1);
+    swap(x[30], x[31]);
+    swap(x[99], x[100]);
+    swap(x[109], x[110]);
+    print(fi, x, n);
 }
 
 int main(){

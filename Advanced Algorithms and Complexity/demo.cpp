@@ -12,13 +12,9 @@ typedef pair<int, int> pii;
 #define maxn 103
 
 int n, m;
-vector<pii> adj[maxn];
-vector<int> caj[maxn];
-vector<int> curFlow;
-
-vector<pii> adjR[maxn];
-vector<int> cajR[maxn];
-vector<int> curFlowR[maxn];
+vector<int> adj[maxn];
+int c[maxn][maxn];
+int curFlow[maxn][maxn];
 
 int par[maxn], addFlow[maxn];
 
@@ -31,11 +27,10 @@ bool findPath(){
     while(! q.empty()){
         int u = q.front();
         q.pop();
-        for(pii edge: adj[u]){
-            int v = edge.first, c = edge.second;
+        for(int v: adj[u]){
             if(par[v]) continue;
-            if(c - curFlow[u][v] > 0) {
-                addFlow[v] = min(addFlow[u], c - curFlow[u][v]);
+            if(c[u][v] - curFlow[u][v] > 0) {
+                addFlow[v] = min(addFlow[u], c[u][v] - curFlow[u][v]);
                 par[v] = u;
                 q.push(v);
             }
@@ -69,12 +64,11 @@ int main()
     std::ios_base::sync_with_stdio(false);
     cin >> n >> m;
     while(m --){
-        int u, v, c;
-        cin >> u >> v >> c;
-        adj[u].push_back({v, c});
-        caj[u].push_back(0);
-        adjR[v].push_back({u, 0});
-        
+        int u, v, ci;
+        cin >> u >> v >> ci;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        c[u][v] += ci;
     }
     cout << maxFlow();
     return 0;

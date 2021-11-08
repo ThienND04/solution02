@@ -1,66 +1,57 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <memory>
+#include <queue>
+#include<cstring>
 
-using std::vector;
-using std::cin;
-using std::cout;
+using namespace std;
 
-class MaxMatching {
- public:
-  void Solve() {
-    vector<vector<bool>> adj_matrix = ReadData();
-    vector<int> matching = FindMatching(adj_matrix);
-    WriteResponse(matching);
-  }
+typedef pair<int, int> pii;
 
- private:
-  vector<vector<bool>> ReadData() {
-    int num_left, num_right;
-    cin >> num_left >> num_right;
-    vector<vector<bool>> adj_matrix(num_left, vector<bool>(num_right));
-    for (int i = 0; i < num_left; ++i)
-      for (int j = 0; j < num_right; ++j) {
-        int bit;
-        cin >> bit;
-        adj_matrix[i][j] = (bit == 1);
-      }
-    return adj_matrix;
-  }
+#define reset(a) memset(a, 0, sizeof(a));
 
-  void WriteResponse(const vector<int>& matching) {
-    for (int i = 0; i < matching.size(); ++i) {
-      if (i > 0)
-        cout << " ";
-      if (matching[i] == -1)
-        cout << "-1";
-      else
-        cout << (matching[i] + 1);
-    }
-    cout << "\n";
-  }
+#define maxn 206
 
-  vector<int> FindMatching(const vector<vector<bool>>& adj_matrix) {
-    // Replace this code with an algorithm that finds the maximum
-    // matching correctly in all cases.
-    int num_left = adj_matrix.size();
-    int num_right = adj_matrix[0].size();
-    vector<int> matching(num_left, -1);
-    vector<bool> busy_right(num_right, false);
-    for (int i = 0; i < num_left; ++i)
-      for (int j = 0; j < num_right; ++j)
-        if (matching[i] == -1 && !busy_right[j] && adj_matrix[i][j]) {
-          matching[i] = j;
-          busy_right[j] = true;
+int n, m;
+bool s[maxn][maxn];
+vector<int> adj[maxn];
+int matchX[maxn], matchY[maxn];
+int used[maxn], cur = 0;
+
+bool DFS(int u){
+    if(used[u] == cur) return 0;
+    used[u] = cur;
+    for(int v: adj[u]){
+        if(matchY[v] == 0 || DFS(matchY[v])){
+            matchX[u] = v;
+            matchY[v] = u;
+            return 1;
         }
-    return matching;
-  }
-};
+    }
+    return 0;
+}
 
-int main() {
-  std::ios_base::sync_with_stdio(false);
-  MaxMatching max_matching;
-  max_matching.Solve();
-  return 0;
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    cin >> n >> m;
+    reset(s);
+    reset(matchX);
+    reset(matchY);
+    for(int i = 1; i <= n; i ++){
+        for(int j = 1; j <= m; j ++) {
+            cin >> s[i][j + n];
+            if(s[i][j + n]){
+                adj[i].push_back(j + n);
+                adj[j + n].push_back(i);
+            }
+        }
+    }
+    int cnt = 0;
+    for(cur = 1; cur <= n; cur ++){
+        if(! matchX[cur]) cnt += DFS(cur);
+    }
+    for(int i = 1; i <= n; i ++){
+        cout << (matchX[i] == 0 ? -1 : matchX[i] - n) << " ";
+    }
+    return 0;
 }

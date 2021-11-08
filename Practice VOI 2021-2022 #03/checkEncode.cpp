@@ -12,33 +12,19 @@ typedef long long ll;
 #define maxn 10000
 
 #define bit(x, i) ((x >> i) & 1)
+#define ALPHABET 26
 
-#define MAX_RESULT 10
+struct Node{
+    char c;
+    Node* child[ALPHABET];
 
-// subtask 1
+    Node(){
+        for(int i = 0; i < ALPHABET; i ++) child[i] = NULL;
+    }
+};
+
 int n;
-string s[maxn];
-string result = "Linzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
-map<string, bool> ok;
-int cnt[maxn];
-
-void Try(string tmp){
-    if(ok[tmp]){
-        if(result.size() > tmp.size()){
-            result = tmp;
-        }
-        else if(tmp.size() == result.size() && tmp < result)  result = tmp;
-        return ;
-    }
-    ok[tmp] = 1;
-    for(int i = 1; i <= n; i ++){
-        if(cnt[i] < 2) {
-            cnt[i] ++;
-            Try(tmp + s[i]);
-            cnt[i] --;
-        }
-    }
-}
+string s;
 
 void init(){
     cin >> n;
@@ -48,15 +34,7 @@ void init(){
 }
 
 void process(){
-    if(n > 10) {
-        cout << -1;
-        return;
-    }
-    Try("");
-    if(result != "Linzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"){
-        cout << result;
-    } 
-    else cout << -1;
+    
 }
 
 int main()

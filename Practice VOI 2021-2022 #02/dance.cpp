@@ -9,18 +9,32 @@ typedef long long ll;
 #define task "dance"
 #define inf 1e18
 #define mod 1000000007
-#define maxn 5001
+#define maxn 100001
+
+#define SQT 320
 
 int n, m;
-bool ok[maxn][maxn];
 vector<int> adj[maxn];
+vector<int> lsBe, lsTo;
 
 void init(){
-
+    cin >> n >> m;
+    while(m --){
+        int x, y;
+        cin >> x >> y;
+        adj[y].push_back(x);
+    }
+    
+    for(int i = 1; i <= n; i ++){
+        if(adj[i].size() <= SQT) lsBe.push_back(i);
+        else lsTo.push_back(i);
+    }
 }
 
 void solve(){
-
+    for(int i = 1; i <= n; i ++){
+        
+    }
 }
 
 int main(){
@@ -29,6 +43,7 @@ int main(){
         freopen(task ".inp", "r", stdin);
         freopen(task ".out", "w", stdout);
     }
+    init();
     solve();
     return 0;
 }
