@@ -6,7 +6,7 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task "checkEncode"
+#define task "decode2"
 #define inf 1e9
 #define mod 1000000007
 #define maxn 10000
