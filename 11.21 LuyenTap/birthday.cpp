@@ -7,34 +7,39 @@ typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
 #define task "birthday"
-#define inf 1000000000
+#define inf 100000000
 #define mod 1000000007
 #define maxn 100001
 
+#define maxk 10000001
+
 int m, n;
 int k[maxn];
-int f[10000001];
-
-#define MAX 10000
+int best[maxk];
+int f[maxk];
 
 void process(){
+    reset(best);
     memset(f, -1, sizeof(f));
     cin >> m >> n;
     for(int i = 1; i <= m; i ++) cin >> k[i];
-    f[0] = 0;
-    for(int i = 1; i < k[m]; i ++) f[i] = 1;
-    for(int i = k[m]; i <= MAX; i ++){
-        for(int j = 1; j <= m; j ++){
-            if(f[i - i % k[j]] != -1){
-                if(f[i] == -1) f[i] = f[i - i % k[j]] + 1;
-                else f[i] = min(f[i], f[i - i % k[j]] + 1);
-            }
+    for(int i = 1; i <= m; i ++){
+        for(int j = k[i] - 1; j < maxk; j += k[i]){
+            best[j] = k[i] - 1;
         }
+    }
+    for(int i = 1; i <= m; i ++) best[maxk - 1] = max(best[maxk - 1], (maxk - 1) % k[i]);
+    for(int i = maxk - 2; i >= 1; i --){
+        best[i] = max(best[i], best[i + 1] - 1);
+    }   
+    f[0] = 0;
+    for(int i = 1; i < maxk; i ++){
+        if(f[i - best[i]] == -1) continue;
+        f[i] = f[i - best[i]] + 1;
     }
     while(n --){
         int x;
         cin >> x;
-        assert(x <= MAX);
         if(f[x] == -1) cout << "oo\n";
         else cout << f[x] << "\n";
     }

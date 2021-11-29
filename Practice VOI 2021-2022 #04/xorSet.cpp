@@ -16,24 +16,62 @@ typedef long long ll;
 #define bit(x, i) ((x >> i) & 1)
 #define ALPHABET 26
 
-int n, k;
-int a[maxn];
-vector<int> adj[maxn];
-
-void init(){
-    cin >> n >> k;
-    reset(a);
-    if(n <= 10000){
-        for(int i = 1; i <= n; i ++) cin >> a[i];
+namespace caculate{
+    template<class T>
+    void add(T& x, T y){
+        x += y;
+        if(x >= mod) x -= mod;
+    }
+    template<class T>
+    void sub(T& x, T y){
+        x -= y;
+        if(x < 0) x += mod;
+    }
+    template<class T>
+    void maximize(T& x, T y){
+        if(x < y) x = y;
+    }
+    template<class T>
+    void minimize(T& x, T y){
+        if(x > y) x = y;
     }
 }
 
-void sub1(){
-    cout << 66;
-}
+using namespace caculate;
 
-void process(){
-    sub1();
+namespace process{
+    int n, k;
+    int a[maxn];
+    int f[105][105][129];
+
+    void init(){
+        cin >> n >> k;
+        for(int i = 1; i <= n; i ++){
+            cin >> a[i];
+        }
+    }
+
+    void process(){
+        init();
+        reset(f);
+        f[0][0][128] = 1;
+        for(int i = 0; i <= 128; i ++) f[0][0][i] = 1;
+        for(int i = 1; i <= n; i ++){
+            for(int j = 0; j <= k; j ++){
+                for(int mask = 0; mask <= 128; mask ++){
+                    add(f[i][j][mask], f[i - 1][j][mask]);
+                    if(j > 0 && a[i] + mask == (a[i] ^ mask)){
+                        add(f[i][j][mask], f[i - 1][j - 1][mask | a[i]]);
+                    }
+                }
+            }
+        }
+        int res = 0;
+        for(int j = 1; j <= k; j ++){
+            for(int t = 0; t <= 128; t ++) add(res, f[n][j][t]);
+        }
+        cout << res;
+    }
 }
 
 int main()
@@ -46,7 +84,6 @@ int main()
         freopen(task ".inp", "r", stdin);
         freopen(task ".out", "w", stdout);
     }
-    init();
-    process();
+    process::process();
     return 0;
 }
