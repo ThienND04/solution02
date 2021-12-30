@@ -17,45 +17,32 @@ typedef long long ll;
 #define LOG 30
 #define ALPHABET 26
 
-namespace caculate
-{
-    template <class T>
-    void add(T &x, T y)
-    {
+namespace caculate{
+    template<class T>
+    void add(T& x, T y){
         x += y;
-        if (x >= mod)
-            x -= mod;
+        if(x >= mod) x -= mod;
     }
-    template <class T>
-    void sub(T &x, T y)
-    {
+    template<class T>
+    void sub(T& x, T y){
         x -= y;
-        if (x < 0)
-            x += mod;
+        if(x < 0) x += mod;
     }
-    template <class T>
-    void maximize(T &x, T y)
-    {
-        if (x < y)
-            x = y;
+    template<class T>
+    void maximize(T& x, T y){
+        if(x < y) x = y;
     }
-    template <class T>
-    void minimize(T &x, T y)
-    {
-        if (x > y)
-            x = y;
+    template<class T>
+    void minimize(T& x, T y){
+        if(x > y) x = y;
     }
 }
 
 using namespace caculate;
 
-namespace process
-{
-    void process()
-    {
-        ll t = 0;
-        t |= 1LL << 2;
-        cerr << __builtin_popcount(t);
+namespace process{
+    void process(){
+        
     }
 }
 

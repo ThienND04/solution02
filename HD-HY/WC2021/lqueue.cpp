@@ -6,10 +6,10 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task ""
+#define task "lqueue"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 10001
+#define maxn 200200
 
 #define maxbit 1024
 
@@ -51,12 +51,40 @@ using namespace caculate;
 
 namespace process
 {
+    int n, x, m;
+    int a[maxn], cnt[maxn];
+
     void process()
     {
-        ll t = 0;
-        t |= 1LL << 2;
-        cerr << __builtin_popcount(t);
-    }
+        cin >> n >> x;
+        cnt[0] = 0;
+        for(int i = 0; i < n; i ++) {
+            cin >> a[i];
+        }
+        cnt[0] = (a[0] >= x);
+        for(int i = 1; i < n; i ++) {
+            cnt[i] = cnt[i - 1] + (a[i] >= x);
+        }
+        int l = 0, r = n - 1;
+        cin >> m;
+        while(m --){
+            int t, k;
+            cin >> t;
+            if(t == 1){
+                r ++;
+                cin >> a[r];
+                cnt[r] = cnt[r - 1] + (a[r] >= x);
+            }
+            else if(t == 2){
+                l ++;
+            }
+            else{
+                cin >> k;
+                int res = (l == 0? cnt[k]: cnt[k + l] - cnt[l - 1]) - (a[k + l] >= x);
+                cout << res << "\n";
+            }
+        }
+    }   
 }
 
 int main()

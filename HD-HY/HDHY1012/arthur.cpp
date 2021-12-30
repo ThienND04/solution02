@@ -6,7 +6,7 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task ""
+#define task "arthur"
 #define inf 1e9
 #define mod 1000000007
 #define maxn 10001
@@ -51,11 +51,36 @@ using namespace caculate;
 
 namespace process
 {
+    int q;
+    int n, w1, w2, w3;
+    pii a[maxn];
+
+    bool cmp(pii& p1, pii& p2){
+        if(p1.first <= p1.second && p2.first > p2.second) 
+            return 1;
+        if (p1.first > p1.second && p2.first <= p2.second)
+            return 0;
+        if(p1.first <= p1.second && p2.first <= p2.second){
+            return p1.first <= p2.first;
+        }
+        else return p1.second >= p2.second;
+    }
+
+    void solve(){
+        cin >> n >> w1 >> w2 >> w3;
+        for(int i = 1; i <= n; i ++) cin >> a[i].first >> a[i].second;
+        sort(a + 1, a + n + 1, cmp);
+        // for(int i = 1; i <= n; i ++){
+        //     cerr << a[i].first << " " << a[i].second << "\n";
+        // }
+    }
+
     void process()
     {
-        ll t = 0;
-        t |= 1LL << 2;
-        cerr << __builtin_popcount(t);
+        cin >> q;
+        while(q --){
+            solve();
+        }
     }
 }
 

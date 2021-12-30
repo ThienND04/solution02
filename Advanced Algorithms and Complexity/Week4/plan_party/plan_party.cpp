@@ -1,74 +1,47 @@
 #include <iostream>
 #include <vector>
 
-struct Vertex {
-    int weight;
-    std::vector <int> children;
-};
-typedef std::vector<Vertex> Graph;
-typedef std::vector<int> Sum;
+using namespace std;
 
-Graph ReadTree() {
-    int vertices_count;
-    std::cin >> vertices_count;
+int n;
+vector<int> a;
+vector<vector<int>> adj;
+vector<long long> f;
+vector<int> par;
 
-    Graph tree(vertices_count);
-
-    for (int i = 0; i < vertices_count; ++i)
-        std::cin >> tree[i].weight;
-
-    for (int i = 1; i < vertices_count; ++i) {
-        int from, to, weight;
-        std::cin >> from >> to;
-        tree[from - 1].children.push_back(to - 1);
-        tree[to - 1].children.push_back(from - 1);
+void DFS(int u){
+    long long s1 = 0, s2 = 0;
+    for(int v: adj[u]){
+        if(v == par[u]) continue;
+        par[v] = u;
+        DFS(v);
+        s1 += f[v];
     }
-
-    return tree;
-}
-
-void dfs(const Graph &tree, int vertex, int parent) {
-    for (int child : tree[vertex].children)
-        if (child != parent)
-            dfs(tree, child, vertex);
-
-    // This is a template function for processing a tree using depth-first search.
-    // Write your code here.
-    // You may need to add more parameters to this function for child processing.
-}
-
-int MaxWeightIndependentTreeSubset(const Graph &tree) {
-    size_t size = tree.size();
-    if (size == 0)
-        return 0;
-    dfs(tree, 0, -1);
-    // You must decide what to return.
-    return 0;
+    s2 = a[u];
+    for(int v: adj[u]){
+        if(v == par[u]) continue;
+        for(int w: adj[v]){
+            if(w == u) continue;
+            s2 += f[w];
+        }
+    }
+    f[u] = max(s1, s2);
 }
 
 int main() {
-    // This code is here to increase the stack size to avoid stack overflow
-    // in depth-first search.
-    const rlim_t kStackSize = 64L * 1024L * 1024L;  // min stack size = 64 Mb
-    struct rlimit rl;
-    int result;
-    result = getrlimit(RLIMIT_STACK, &rl);
-    if (result == 0)
-    {
-        if (rl.rlim_cur < kStackSize)
-        {
-            rl.rlim_cur = kStackSize;
-            result = setrlimit(RLIMIT_STACK, &rl);
-            if (result != 0)
-            {
-                fprintf(stderr, "setrlimit returned result = %d\n", result);
-            }
-        }
+    cin >> n;
+    a.resize(n + 1);
+    adj.resize(n + 1);
+    f.resize(n + 1);
+    par.resize(n + 1);
+    for(int i = 1; i <= n; i ++) cin >> a[i];
+    for(int i = 1; i < n; i ++){
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-
-    // Here begins the solution
-    Graph tree = ReadTree();
-    int weight = MaxWeightIndependentTreeSubset(tree);
-    std::cout << weight << std::endl;
+    DFS(1);
+    cout << f[1];
     return 0;
 }

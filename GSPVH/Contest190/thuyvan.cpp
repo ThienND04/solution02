@@ -49,39 +49,80 @@ namespace caculate
 
 using namespace caculate;
 
+class HashTable{
+private: 
+    const int BASE = 256;
+    const int MOD = 1e9 + 2277;
+    const ll MOD2 = 1ll * MOD * MOD;
+
+    int n;
+    vector<int> lt;
+    vector<int> h;
+
+public:
+    HashTable(){ }
+    void init(const string& s){
+        n = s.size() - 1;
+        h.resize(n + 1);
+        lt.resize(n + 1);
+        h[0] = 0;
+        lt[0] = 1;
+        for(int i = 1; i <= n; i ++) lt[i] = (1ll * lt[i - 1] * BASE) % MOD;
+        for(int i = 1; i <= n; i ++){
+            h[i] = (1ll * h[i - 1] * BASE + s[i]) % MOD;
+        }
+    }
+    int get(int left, int right){
+        return (h[right] - 1ll * h[left - 1] * lt[right - left + 1] + MOD2) % MOD;
+    }
+};
+
 namespace process
 {
     int n, k;
     string s[maxn];
-    map<string, int> cnt[maxn];
-    map<string, bool> cnt01[maxn];
+    int len[maxn];
+
+    HashTable hs[maxn];
+
+    int ok(int x){
+        map<int, int> mp;
+        for(int i = 1; i <= n; i ++){
+            map<int, bool> mp2;
+            for(int j = 1; j <= len[i] - x + 1; j ++){
+                mp2[hs[i].get(j, j + x - 1)] = 1;
+            }
+            for(auto tmp: mp2){
+                mp[tmp.first] ++;
+            }
+        }
+        for(auto tmp: mp){
+            if(tmp.second >= k) return tmp.first;
+        }
+        return -1;
+    }
 
     void process()
     {
         cin >> n >> k;
-        for(int i = 1; i <= n; i ++) cin >> s[i];
-        for(int sz = 1; sz < maxn; sz ++){
-            for(int i = 1; i <= n; i ++){
-                int gh = s[i].size() - sz;
-                for (int j = 0; j <= gh; j++)
-                {
-                    cnt01[i][s[i].substr(j, sz)] = 1;
-                }
-            }
+        cerr << 1;
+        for(int i = 1; i <= n; i ++){
+            cin >> s[i];
+            len[i] = s[i].size();
+            s[i] = " " + s[i];
+            hs[i].init(s[i]);
         }
-
-        for (int i = 1; i <= n; i++)
-        {
-            for (auto j : cnt01[i])
-            {
-                cnt[j.first.size()][j.first] ++;
-            }  
+        int l = 0, r = *max_element(len + 1, len + n + 1) + 1;
+        while(r - l > 1){
+            int mid = (l + r) / 2;
+            if(ok(mid) != -1)  l = mid;
+            else r = mid;
         }
-
-        for(int sz = maxn - 1; sz >= 1; sz --){
-            for(auto i: cnt[sz]){
-                if(i.second >= k) {
-                    cout << i.first;
+        int h = ok(l);
+        for(int i = 1; i <= n; i ++){
+            for(int j = 1; j <= len[i] - l + 1; j ++){
+                if(hs[i].get(j, j + l - 1) == h){
+                    cout << s[i].substr(j, l);
                     exit(0);
                 }
             }

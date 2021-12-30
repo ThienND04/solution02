@@ -6,7 +6,7 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task ""
+#define task "a"
 #define inf 1e9
 #define mod 1000000007
 #define maxn 10001
@@ -51,11 +51,18 @@ using namespace caculate;
 
 namespace process
 {
+
+    int Rand(int gh){
+        return rand() % gh;
+    }
+
     void process()
     {
-        ll t = 0;
-        t |= 1LL << 2;
-        cerr << __builtin_popcount(t);
+        srand(clock());
+        int n;
+        cin >> n;
+        cout << n << "\n";
+        for(int i = 1; i <= n; i ++) cout << Rand(10) << " ";
     }
 }
 
@@ -66,8 +73,7 @@ int main()
     cout.tie(0);
     if (fopen(task ".inp", "r"))
     {
-        freopen(task ".inp", "r", stdin);
-        freopen(task ".out", "w", stdout);
+        freopen(task ".inp", "w", stdout);
     }
     process::process();
     return 0;
