@@ -4,7 +4,7 @@ using namespace std;
 
 typedef pair<int, int> pii;
 typedef long long ll;
-#define maxn 300001
+#define maxn 1000001
 #define task "mulgame"
 #define BLOCK_SIZE 100001
 
@@ -15,32 +15,28 @@ typedef long long ll;
 #define bit(x, i) ((x >> i) & 1)
 
 int t;
-int f[maxn];
+bool f[maxn];
+map<int, bool> mp;
 
 void init(){
     cin >> t;
-    f[1] = 2;
-    for(int i = 2; i < maxn; i ++) f[i] = 0;
+    reset(f);
+
     for(int i = 2; i < maxn; i ++){
         for(int j = 2; j <= 9; j ++){
-            if(i % j == 0){
-                if(f[i] == 1) continue;
-            }
+            if(! f[(i - 1) / j + 1]) f[i] = 1;
         }
     }
+    // f[1] = 1;
 }
 
 bool check(int n){
-    if(n == 1) return 1;
-    int j = n / 9;
-    while(j * 9 < n) j ++;
-    int i = j / 2;
-    while(i * 2 < j) i ++;
-    while(i < j){
-        if(f[i ++] == 1) return 1;
+    if(n < maxn) return f[n];
+    if(mp.find(n) != mp.end()) return mp[n];
+    for(int i = 2; i <= 9; i ++){
+        if(! check((n - 1) / i + 1)) return (mp[n] = 1);
     }
-    if(f[n] == 1) return 1;
-    return 0;
+    return (mp[n] = 0);
 }
 
 void process(){
