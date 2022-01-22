@@ -56,7 +56,7 @@ namespace process
     vector<int> uadj[maxn];
     int level[maxn], tp[maxn];
     int unvisited[maxn], d[maxn];
-    int dist[101][maxn];
+    int dist[maxn][maxn];
 
     void prepare(){
         memset(dist, -1, sizeof(dist));
@@ -99,6 +99,7 @@ namespace process
 
     void init(){
         cin >> n >> m;
+        // assert(n <= 700);
         for (int i = 0; i < n; i++)
             level[i] = n - 1;
         while (m--)
@@ -138,7 +139,11 @@ namespace process
             if(level[x] < n / 2){
                 cout << dist[tp[x]][y] << "\n";
             }
+            else if(x == y){
+                cout << 0 << "\n";
+            }
             else{
+                // assert(0);
                 int tmp = lower_bound(uadj[x].begin(), uadj[x].end(), y) - uadj[x].begin();
                 if(tmp < uadj[x].size() && uadj[x][tmp] == y) cout << 2 << "\n";
                 else cout << 1 << "\n";

@@ -9,7 +9,7 @@ typedef long long ll;
 #define task "rlesubstr"
 #define inf 1e9
 #define mod 111539786
-#define maxn 1001
+#define maxn 1002
 
 #define maxbit 1024
 
@@ -55,8 +55,9 @@ namespace process
     string s;
     char ch[maxn];
     int num[maxn], dp[maxn];
+    int nt[maxn][26];
 
-    void solve(){
+    void init(){
         cin >> s;
         n = 0;
         reset(dp);
@@ -78,12 +79,38 @@ namespace process
         //     cerr << ch[i] << ": " << num[i] << "\n";
         // }
         // cerr << "-----------------------------\n";
-        dp[0] = 1;
-        for(int i = 1; i <= n; i ++){
-            for(int j = 0; j < i; j ++){
-                
+        int last[26];
+        fill(last, last + 26, n + 1);
+        cerr << 'z' - 'a';
+        for(int i = n; i >= 1; i --){
+            for(int j = 0; j < 26; j ++){
+                nt[i][j] = last[j];
             }
+            last[ch[i] - 'a'] = i;
         }
+        for(int j = 0; j < 26; j ++){
+            nt[0][j] = last[j];
+        }
+    }
+
+    void solve(){
+        init();
+        reset(dp);
+        for(int j = 0; j < 26; j ++){
+            dp[nt[0][j]] = 1;
+        }
+        for(int i = 1; i < n; i ++){
+            for(int j = 0; j < 26; j ++){
+                if(j == ch[i] - 'a') continue;
+                dp[nt[i][j]] = (dp[nt[i][j]] + 1ll * dp[i] * num[i]) % mod;
+            }
+            dp[nt[i][ch[i] - 'a']] = (dp[nt[i][ch[i] - 'a']] + dp[i]) % mod;
+        }
+        int res = 0;
+        for(int i = 1; i <= n; i ++){
+            res =  (res + 1ll * num[i] * dp[i]) % mod;
+        }
+        cout << res << "\n";
     }
 
     void process()
