@@ -48,6 +48,7 @@ namespace process{
 
     void init(){
         cin >> n;
+        assert(n >= 9);
         for(int i = 1; i <= n; i ++){
             cin >> a[i];
         }

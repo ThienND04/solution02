@@ -4,6 +4,7 @@ using namespace std;
 
 typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
+typedef pair<long long, int> pli;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
 #define task "bai1"
@@ -42,94 +43,56 @@ using namespace caculate;
 
 namespace process{
     int n, m;
-    int e[maxn];
-    pii monHoc[maxn];
-    ll totalMin[maxn];
-    bool mask[maxn];
+    int e[maxn], res[300001];
+    pli query[300001];
 
-    bool cmp(pii& p1, pii& p2){
-        return p1.first > p2.first;
+    int getResult(ll q){
+        ll sum = q;
+        int cnt = 0;
+        priority_queue<int> pq;
+        for(int i = 1; i <= n; i ++){
+            sum += e[i];
+            pq.push(- e[i]);
+            if(sum < 0){
+                sum += pq.top();
+                pq.pop();
+            }
+            else cnt ++;
+        }
+        return cnt;
     }
 
-    vector<int> th[21];
-
-    bool ok23(ll s, int x){
-        for(int y: th[x]){
-            ll s1 = 0;
-            bool t = 1;
-            for(int i = 0; i < n; i ++){
-                if(bit(y, i)){
-                    s1 += e[i + 1];
-                    if(s + s1 < 0) t = 0;
-                }
-            }
-            if(t) return 1;
+    void calc(int l, int r, int minRes, int maxRes){
+        if(l > r) return;
+        if(minRes == maxRes){
+            for(int i = l; i <= r; i ++) res[query[i].second] = minRes;
+            return ;
         }
-        return 0;
-    }
-
-    void subtask23(){
-        for(int i = 0; i < (1 << n); i ++){
-            int k = __builtin_popcount(i);
-            th[k].push_back(i);
-        }
-        for(int i = 1; i <= m; i ++){
-            ll s;
-            cin >> s;
-            int l = 0, r = n + 1;
-            while(r - l > 1){
-                int mid = (l + r) / 2;
-                if(ok23(s, mid)) l = mid;
-                else r = mid;
-            }
-            cout << l << " ";
-        }
+        int mid = (l + r) / 2;
+        int x = getResult(query[mid].first);
+        res[query[mid].second] = x;
+        calc(l, mid - 1, minRes, x);
+        calc(mid + 1, r, x, maxRes);
     }
 
     void init(){
-        reset(mask); reset(totalMin);
         cin >> n >> m;
-        // cerr << n;
-        for(int i = 1; i <= n; i ++) {
-            cin >> e[i];
-            monHoc[i] = {e[i], i};
+        for(int i = 1; i <= n;  i++) cin >> e[i];
+        for(int i = 1; i <= m; i ++) {
+            cin >> query[i].first;
+            query[i].second = i;
+            // cout << getResult(query[i].first) << " ";
         }
-        sort(monHoc + 1, monHoc + n + 1, cmp);
-        for(int i = 1; i <= n; i ++){
-            ll s = 0;
-            for(int j = 1; j <= i; j ++) mask[monHoc[j].second] = 1;
-            for(int j = 1; j <= n; j ++){
-                if(mask[j]){
-                    s += e[j];
-                    minimize(totalMin[i], s);
-                }
-            }
-            for(int j = 1; j <= i; j ++) mask[monHoc[j].second] = 0;
-        }
+        sort(query + 1, query + m + 1);
     }
 
-    bool ok(ll s, int x){
-        return s + totalMin[x] >= 0;
-    }
-
-    void subtask1(){
-        for(int i = 1; i <= m; i ++){
-            ll s;
-            cin >> s;
-            int l = 0, r = n + 1;
-            while(r - l > 1){
-                int mid = (l + r) / 2;
-                if(ok(s, mid)) l = mid;
-                else r = mid;
-            }
-            cout << l << " ";
-        }
-    }
 
     void process(){
         init();
-        if(n <= 20) return subtask23();
-        return subtask1();
+        calc(1, m, 0, n);
+        for(int i = 1; i <= m; i ++){
+            cout << res[i] << " ";
+        }
     }
 }
 

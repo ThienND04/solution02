@@ -21,6 +21,8 @@
         "valarray": "cpp",
         "variant": "cpp",
         "*.inc": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "bit": "cpp",
+        "memory_resource": "cpp"
     }
 }

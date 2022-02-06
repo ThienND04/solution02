@@ -40,78 +40,84 @@ namespace caculate{
 
 using namespace caculate;
 
+class DSU{
+public:
+    int n;
+    vector<int>par;
+
+    DSU(){}
+
+    void init(){
+        for(int i = 1; i <= n; i ++) par[i] = i;
+    }
+
+    DSU(const int& _n){
+        n = _n;
+        par.resize(n + 1);
+        init();
+    }
+    int root(int u){
+        if(u == par[u]) return u;
+        return (par[u] = root(par[u]));
+    }
+    bool join(int u, int v){
+        u = root(u);
+        v = root(v);
+        if(u == v) return 0;
+        par[u] = v;
+        return 1;
+    }
+};
+
 namespace process{
     int n, m;
     ll k;
-    bool nt[maxn][maxn];
+    pii st[maxn];
+    bool visted[maxn], pc[maxn];
+    int ke[maxn];
 
-    int visited[maxn], q[maxn];
-    bool check(){
-        for(int i = 1; i < n; i ++) {
-            if(nt[q[i]][q[i + 1]]) return 0;
-        }
-        return 1;
-    }
-    void Try(int pos){
-        if(pos > n){
-            if(check()) {
-                k --;
-                if(k == 0) {
-                    for(int i = 1; i <= n; i ++) cout << q[i] << " ";
-                    exit(0);
-                }
-                
-            }
-            return;
-        }
-        for(int i = 1; i <= n; i ++){
-            if(! visited[i]){
-                q[pos] = i;
-                visited[i] = 1;
-                Try(pos + 1);
-                visited[i] = 0;
-            }
-        }
-    }
-
-    void subtask1(){
-        Try(1);
-    }
-
-    ll gt(int x){
-        ll res = 1;
-        for(int i = 1; i <= x; i ++) res *= i;
-        return res;
-    }
-    void subtask3(){
-        for(int i = 1; i <= n; i ++){
-            for(int j = 1; j <= n; j ++){
-                if(visited[j]) continue;
-                ll t = gt(n - i);
-                if(t < 0 || t >= k) {
-                    q[i] = j;
-                    visited[j] = 1;
+    ll cnt(int curPos, int last){
+        if(curPos == n - 1) return 1;
+        ll res = 0;
+        DSU tmp(n);
+        for(int x = 0; x < (1 << m); x ++){
+            int cnt = __builtin_popcount(x), ok = 1;
+            ll sum = 1;
+            reset(pc); reset(ke);
+            tmp.init();
+            
+            for(int i = 0; i < m; i ++){
+                if(! bit(x, i)) continue;
+                int u = st[i].first, v = st[i].second;
+                if(visted[u] || visted[v]) continue;
+                if(! tmp.join(u, v)) {
+                    ok = 0;
                     break;
                 }
-                else{
-                    k -= t;
-                }
+                ke[u] ++; ke[v] ++;
+            }
+
+            int cnt = 0;
+            for(int i = 1; i <= n; i ++){
+                if(ke[i] > 2) ok = 0;
+                if(tmp.root(i) == i || pc[tmp.root(i)]) continue;
+                cnt ++;
+                pc[tmp.root(i)] = 1;
+                sum *= 2;
+            }
+            for(int i = 1; i <= n; i ++){
+                if(! visted[i] && ! pc[tmp.root(i)]) cnt ++; 
+            }
+            for(int i = 1; i <= cnt; i ++){
+                
             }
         }
-        for(int i = 1; i <= n; i ++) cout << q[i] << " ";
-    }
+    }   
 
     void process(){
-        reset(nt); reset(visited);
         cin >> n >> m >> k;
-        while(m --) {
-            int u, v;
-            cin >> u >> v;
-            nt[u][v] = nt[v][u] = 1;
-        }
-        if(n <= 10) return subtask1();
-        if(m == 0) return subtask3();
-        subtask1();
+        for(int i = 0; i < m; i ++)  cin >> st[i].first >> st[i].second;
+
     }
 }
 
