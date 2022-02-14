@@ -42,8 +42,8 @@ private:
 
     void renameInpOut(int lf, int rt){
         for(int i = lf; i <= rt; i ++){
-            system(("mv Test/" + task + "/test" + getNum(i) + __toupper(task) + ".inp Test/" + task + "/test" + getNum(i) + task + ".inp").c_str());
-            system(("mv Test/" + task + "/test" + getNum(i) + __toupper(task) + ".out Test/" + task + "/test" + getNum(i) + task + ".out").c_str());
+            system(("mv Test/" + task + "/test" + getNum(i) + __toupper(task) + ".INP Test/" + task + "/test" + getNum(i) + task + ".inp").c_str());
+            system(("mv Test/" + task + "/test" + getNum(i) + __toupper(task) + ".OUT Test/" + task + "/test" + getNum(i) + task + ".out").c_str());
         }
     }
 
@@ -59,6 +59,7 @@ private:
                 ok[i] = 1;
                 point ++;
             }
+            //system("clear");
         }
 
         // print
@@ -75,9 +76,11 @@ private:
         system(("cp Test/" + task + "/test" + getNum(id) + task + ".inp " + task + ".inp").c_str());
         system(("./" + task).c_str());
         if(system(("diff -Z Test/" + task + "/test" + getNum(id) + task + ".out " + task + ".out").c_str())){
+            //system("clear");
             return 0;
         }
         else {
+            //system("clear");
             ok[id] = 1;
             return 1;
         }

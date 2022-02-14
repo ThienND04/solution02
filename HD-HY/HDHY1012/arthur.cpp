@@ -51,32 +51,91 @@ using namespace caculate;
 
 namespace process
 {
-    int q;
-    int n, w1, w2, w3;
+    int q, n, m, w1, w2, w3;
+    int c[maxn], d[maxn];
     pii a[maxn];
 
-    bool cmp(pii& p1, pii& p2){
-        if(p1.first <= p1.second && p2.first > p2.second) 
-            return 1;
-        if (p1.first > p1.second && p2.first <= p2.second)
-            return 0;
-        if(p1.first <= p1.second && p2.first <= p2.second){
-            return p1.first <= p2.first;
+    // a <= b
+    bool cmp1(const pii& p1, const pii& p2){
+        return p1.first <= p2.first;
+    }
+
+    // a > b
+    bool cmp2(const pii& p1, const pii& p2){
+        return p1.second >= p2.second;
+    }
+
+    int johnson(int _ta = 0, int _tb = 0){
+        // if(m == 0) return 0;
+        int ta = _ta, tb = _tb;
+        for(int i = 1; i <= m; i ++){
+            ta += a[i].first;
+            tb += a[i].second;
+            maximize(tb, ta + a[i].second);
         }
-        else return p1.second >= p2.second;
+        return tb;
+    }
+
+    void subtask2(){
+        int cnt = 0;
+        m = 0;
+        for(int i = 1; i <= n; i ++){
+            if(c[i] <= d[i]) a[++ cnt] = {c[i], d[i]};
+        }
+        m = cnt;
+        sort(a + 1, a + cnt + 1, cmp1);
+        for(int i = 1; i <= n; i ++){
+           if(c[i] > d[i]) a[++ m] = {c[i], d[i]};
+        }
+        if(m - cnt > 1) sort(a + cnt + 2, a + m + 1, cmp2);
+        double res = 1.0 * johnson() / 2;
+        cout << res << "\n";
+    }
+
+    double calc(double S, int tb, int te){
+        double res = 0;
+        maximize(res, w1 * (S - tb));
+        maximize(res, w2 * (te - S));
+        maximize(res, w3 * S);
+        return res;
+    }
+
+    void subtask3(){
+        double minP = 1e18;
+        for(int i = 1; i <= n; i ++){
+            int cnt = 0;
+            m = 0;
+            for(int j = 1; j <= n; j ++){
+                if(i == j) continue;
+                if(c[j] <= d[j]) a[++ cnt] = {c[j], d[j]};
+            }
+            m = cnt;
+            sort(a + 1, a + cnt + 1, cmp1);
+            for(int j = 1; j <= n; j ++){
+                if(j == i) continue;
+                if(c[j] > d[j]) a[++ m] = {c[j], d[j]};
+            }
+            if(m - cnt > 1) sort(a + cnt + 2, a + m + 1, cmp2);
+
+            int tb = c[i] + d[i];
+            int te = johnson(c[i], c[i] + d[i]);
+            double S = 1.0 * (tb + te) / 2;
+            double P = calc(S, tb, te);
+            minimize(minP, P);
+        }
+        cout << minP << "\n";
     }
 
     void solve(){
         cin >> n >> w1 >> w2 >> w3;
-        for(int i = 1; i <= n; i ++) cin >> a[i].first >> a[i].second;
-        sort(a + 1, a + n + 1, cmp);
-        // for(int i = 1; i <= n; i ++){
-        //     cerr << a[i].first << " " << a[i].second << "\n";
-        // }
+        for(int i = 1; i <= n; i ++) cin >> c[i] >> d[i];
+        if(w1 == 0 && w2 == 1 && w3 == 1) return subtask2();
+        if(w1 == 1 && w2 == 1 && w3 == 0) return subtask3();
     }
 
     void process()
     {
+        cout << fixed << setprecision(1);
         cin >> q;
         while(q --){
             solve();

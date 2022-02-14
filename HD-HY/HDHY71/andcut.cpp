@@ -1,4 +1,3 @@
- 
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -10,7 +9,7 @@ typedef long long ll;
 #define task "andcut"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 10001
+#define maxn 2001
 
 #define maxbit 1024
 
@@ -42,8 +41,36 @@ namespace caculate{
 using namespace caculate;
 
 namespace process{
+    int m, n, q;
+    bool mask[maxn][maxn];
+
+    int Query(int x, int y, int u, int v){
+        int res = 0;
+        res += (mask[x][y] == 0);
+		for(int j = y + 1; j <= v; ++ j) {
+			if(mask[x][j] == 0 && mask[x][j] != mask[x][j - 1]) ++ res;
+		}
+		res += (mask[x][y] == 0);
+		for(int i = x + 1; i <= u; ++ i) {
+			if(mask[i][y] == 0 && mask[i][y] != mask[i - 1][y]) ++ res;
+		}
+		res -= (mask[x][y] == 0);
+		return res;
+    }
+
     void process(){
-        
+        cin >> m >> n >> q;
+        int num = 0;
+        for(int i = 0; i < m; i ++){
+            for(int j = 0; j < n; j ++){
+                mask[i][j] = (i & j) > 0;
+            }
+        }
+        while(q --){
+            int x, y, u, v;
+            cin >> x >> y >> u >> v;
+            cout << Query(x ,y, u, v) << "\n";
+        }
     }
 }
 

@@ -1,0 +1,8 @@
+{
+  "name": "Bot",
+  "version": "1",
+  "description": "Messenger ",
+  "main": "index.js",
+  "author": "ThienND",
+  "license": "MIT"
+}
