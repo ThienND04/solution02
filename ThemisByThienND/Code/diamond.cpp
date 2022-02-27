@@ -1,0 +1,1 @@
+/home/thiennd/Documents/solution02/HD-HY-NK/PreVOI/diamond.cpp

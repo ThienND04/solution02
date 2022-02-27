@@ -6,10 +6,10 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task "bus"
+#define task "strval"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 301
+#define maxn 100001
 
 #define maxbit 1024
 
@@ -40,30 +40,49 @@ namespace caculate{
 
 using namespace caculate;
 
-int w, h, xs, ys, xt, yt;
-int n;
+int POW(int a, int b){
+    if(b == 1) return a;
+    int c = POW((1ll * a * a) % mod, b / 2);
+    if(b % 2 == 1) c = (1ll * c * a) % mod;
+    return c;
+}
 
+int n, k;
+string s;
 
+namespace subtask1{
+    void subtask1(){
+        cout << POW(2, n);
+    }
+}
 
-namespace subtask3{
-    void subtask3(){
+namespace subtask2{
+    map<string, int> cnt;
 
+    void subtask2(){
+        for(int x = 0; x < (1 << n); x ++){
+            string tmp = "";
+            for(int i = 1; i <= n; i ++){
+                if(! bit(x, i - 1)) continue;
+                tmp += s[i];
+            }
+            cnt[tmp] ++;
+        }
+        int res = 0;
+        for(auto tmp: cnt){
+            //cerr << tmp.first << " " << tmp.second << "\n";
+            add(res, POW(tmp.second, k));
+        }
+        cout << res;
     }
 }
 
 namespace process{
-    void init(){
-        cin >> w >> h >> xs >> ys >> xt >> yt;
-        cin >> n;
-        for(int i = 1; i <= n; i ++){
-            int x1, y1, x2, y2, t;
-            cin >> x1 >> y1 >> x2 >> y2 >> t;
-            for(int x = 0; x )
-        }
-    }
-
     void process(){
-        init();
+        cin >> n >> k >> s;
+        s = " " + s;
+        if(k == 1) return subtask1::subtask1();
+        if(n <= 20) return subtask2::subtask2();
     }
 }
 

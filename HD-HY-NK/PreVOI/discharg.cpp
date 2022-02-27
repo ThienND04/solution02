@@ -6,10 +6,10 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task "bus"
+#define task "discharg"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 301
+#define maxn 10001
 
 #define maxbit 1024
 
@@ -40,30 +40,33 @@ namespace caculate{
 
 using namespace caculate;
 
-int w, h, xs, ys, xt, yt;
 int n;
+int t[maxn];    
 
+namespace subtask2{
 
+    ll dp[maxn];
 
-namespace subtask3{
-    void subtask3(){
-
+    void subtask2(){
+        memset(dp, 99, sizeof(dp));
+        dp[0] = 0;
+        for(int i = 1; i <= n; i ++){
+            int maxVal = t[i];
+            for(int j = i - 1; j >= 1; j --){
+                maximize(maxVal, t[j]);
+                minimize(dp[i], dp[j - 1] + 1ll * maxVal * (n - j + 1));
+            }
+        }
+        cout << dp[n];
     }
 }
 
 namespace process{
-    void init(){
-        cin >> w >> h >> xs >> ys >> xt >> yt;
-        cin >> n;
-        for(int i = 1; i <= n; i ++){
-            int x1, y1, x2, y2, t;
-            cin >> x1 >> y1 >> x2 >> y2 >> t;
-            for(int x = 0; x )
-        }
-    }
-
+    
     void process(){
-        init();
+        cin >> n;
+        for(int i = 1; i <= n; i ++) cin >> t[i];
+        if(n <= 1500) return subtask2::subtask2();
     }
 }
 

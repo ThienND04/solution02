@@ -1,3 +1,4 @@
+ 
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -6,10 +7,10 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task "bus"
+#define task "perdiff"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 301
+#define maxn 10001
 
 #define maxbit 1024
 
@@ -40,30 +41,18 @@ namespace caculate{
 
 using namespace caculate;
 
-int w, h, xs, ys, xt, yt;
 int n;
-
-
 
 namespace subtask3{
     void subtask3(){
-
+        
     }
 }
 
 namespace process{
-    void init(){
-        cin >> w >> h >> xs >> ys >> xt >> yt;
-        cin >> n;
-        for(int i = 1; i <= n; i ++){
-            int x1, y1, x2, y2, t;
-            cin >> x1 >> y1 >> x2 >> y2 >> t;
-            for(int x = 0; x )
-        }
-    }
-
     void process(){
-        init();
+        cin >> n;
+
     }
 }
 

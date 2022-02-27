@@ -6,10 +6,10 @@ typedef pair<double, double> pdd;
 typedef pair<int, int> pii;
 typedef long long ll;
 #define reset(a) memset(a, 0, sizeof(a))
-#define task "bus"
+#define task "pokemon"
 #define inf 1e9
 #define mod 1000000007
-#define maxn 301
+#define maxn 10001
 
 #define maxbit 1024
 
@@ -40,30 +40,39 @@ namespace caculate{
 
 using namespace caculate;
 
-int w, h, xs, ys, xt, yt;
-int n;
+int t, n, m, k;
 
+namespace subtask1{
+    ll ls[10000000];
+    int num = 0;
 
+    void Try(int idSkill, ll s = 0){
+        if(idSkill == 0){
+            ls[++ num] = s;
+            return;
+        }
 
-namespace subtask3{
-    void subtask3(){
-
+        for(int i = 0; i <= m; i ++){
+            Try(idSkill - 1, s + 1ll * i * idSkill);
+        }
+    }
+    ll subtask1(){
+        ll res = 0;
+        Try(n, 0);
+        sort(ls + 1, ls + num + 1);
+        for(int i = 1; i <= k; i ++) res += ls[i];
+        return res;
     }
 }
 
 namespace process{
-    void init(){
-        cin >> w >> h >> xs >> ys >> xt >> yt;
-        cin >> n;
-        for(int i = 1; i <= n; i ++){
-            int x1, y1, x2, y2, t;
-            cin >> x1 >> y1 >> x2 >> y2 >> t;
-            for(int x = 0; x )
-        }
-    }
 
     void process(){
-        init();
+        cin >> t;
+        while(t --){
+            cin >> n >> m >> k;
+            cout << subtask1::subtask1() << "\n";
+        }
     }
 }
 
